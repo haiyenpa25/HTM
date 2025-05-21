@@ -39,7 +39,36 @@
                         <p>Dashboard</p>
                     </a>
                 </li>
-                <!-- Thêm các menu khác nếu cần -->
+                <li class="nav-item">
+                    <a href="{{ route('users.index') }}" class="nav-link">
+                        <i class="nav-icon fas fa-users"></i>
+                        <p>Quản Lý Người Dùng</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('users.permissions') }}" class="nav-link">
+                        <i class="nav-icon fas fa-user-lock"></i>
+                        <p>Phân Quyền Người Dùng</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('roles.index') }}" class="nav-link">
+                        <i class="nav-icon fas fa-users-cog"></i>
+                        <p>Quản Lý Vai Trò</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('roles.permissions') }}" class="nav-link">
+                        <i class="nav-icon fas fa-lock"></i>
+                        <p>Phân Quyền Vai Trò</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('permissions.index') }}" class="nav-link">
+                        <i class="nav-icon fas fa-key"></i>
+                        <p>Quản Lý Quyền</p>
+                    </a>
+                </li>
             </ul>
         </nav>
         <!-- /.sidebar-menu -->
