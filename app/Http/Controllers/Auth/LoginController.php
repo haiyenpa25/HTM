@@ -10,13 +10,11 @@ class LoginController extends Controller
 {
     public function showLoginForm()
     {
-
         return view('auth.login');
     }
 
     public function login(Request $request)
     {
-        // Xác thực thông tin đăng nhập
         $credentials = $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required'],
@@ -24,7 +22,6 @@ class LoginController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-
             return redirect()->intended($this->redirectTo());
         }
 
@@ -36,10 +33,8 @@ class LoginController extends Controller
     public function logout(Request $request)
     {
         Auth::logout();
-
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-
         return redirect('/login');
     }
 
@@ -50,9 +45,7 @@ class LoginController extends Controller
             return '/dashboard';
         }
 
-        $directPermissions = $user->getDirectPermissions()->pluck('name')->toArray();
-        $rolePermissions = $user->getPermissionsViaRoles()->pluck('name')->toArray();
-        $permissions = array_unique(array_merge($directPermissions, $rolePermissions));
+        $permissions = $user->all_permissions;
 
         if (empty($permissions)) {
             return '/dashboard';

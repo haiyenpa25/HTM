@@ -6,17 +6,25 @@ use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Auth\LoginController;
 
+// Route cho đăng nhập
+Route::middleware('guest')->group(function () {
+    Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [LoginController::class, 'login']);
+});
+
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout')->middleware('auth');
+
 Route::get('/dashboard', function () {
     return view('dashboard');
-})->middleware('auth');
+})->middleware('auth')->name('dashboard');
 
 Route::get('/trung-lao', function () {
     return view('trung-lao');
-})->middleware('auth');
+})->middleware('auth')->name('trung-lao');
 
 Route::get('/thanh-nien', function () {
     return view('thanh-nien');
-})->middleware('auth');
+})->middleware('auth')->name('thanh-nien');
 
 // Route cho phân quyền vai trò
 Route::get('/roles/permissions', [RoleController::class, 'permissions'])->name('roles.permissions')->middleware('auth');
@@ -34,11 +42,3 @@ Route::resource('permissions', PermissionController::class)->middleware('auth');
 
 // Route cho quản lý người dùng
 Route::resource('users', UserController::class)->middleware('auth');
-
-// Route cho đăng nhập
-Route::middleware('guest')->group(function () {
-    Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
-    Route::post('/login', [LoginController::class, 'login']);
-});
-
-Route::post('/logout', [LoginController::class, 'logout'])->name('logout')->middleware('auth');

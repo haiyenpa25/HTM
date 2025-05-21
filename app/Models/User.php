@@ -23,4 +23,14 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function getAllPermissionsAttribute()
+    {
+        $directPermissions = $this->permissions()->pluck('name')->toArray();
+        $rolePermissions = [];
+        foreach ($this->roles as $role) {
+            $rolePermissions = array_merge($rolePermissions, $role->permissions()->pluck('name')->toArray());
+        }
+        return array_unique(array_merge($directPermissions, $rolePermissions));
+    }
 }
