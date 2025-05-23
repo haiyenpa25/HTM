@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class PermissionController extends Controller
 {
@@ -24,7 +25,13 @@ class PermissionController extends Controller
             'name' => 'required|unique:permissions,name',
         ]);
 
-        Permission::create(['name' => $request->name, 'guard_name' => 'web']);
+        $permission = Permission::create(['name' => $request->name, 'guard_name' => 'web']);
+
+        // Tự động gán quyền mới cho vai trò admin
+        $adminRole = Role::findByName('admin');
+        if ($adminRole) {
+            $adminRole->givePermissionTo($permission);
+        }
 
         return redirect()->route('permissions.index')->with('success', 'Quyền đã được tạo.');
     }

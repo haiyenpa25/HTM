@@ -105,7 +105,29 @@ class UserController extends Controller
         Log::info('Số lượng vai trò: ' . $roles->count());
         $permissions = Permission::all();
         Log::info('Số lượng quyền: ' . $permissions->count());
-        return view('users.permissions', compact('users', 'roles', 'permissions'));
+
+        // Nhóm quyền thành cây thư mục
+        $permissionTree = [];
+        foreach ($permissions as $permission) {
+            // Tách tên quyền thành thư mục và tên quyền (ví dụ: su_kien.xem -> su_kien và xem)
+            $parts = explode('.', $permission->name);
+            if (count($parts) === 2) {
+                $folder = $parts[0]; // su_kien
+                $perm = $parts[1];   // xem
+                if (!isset($permissionTree[$folder])) {
+                    $permissionTree[$folder] = [];
+                }
+                $permissionTree[$folder][] = $permission;
+            } else {
+                // Nếu quyền không có dạng thư_mục.tên_quyền, đặt vào thư mục "Khác"
+                if (!isset($permissionTree['Khác'])) {
+                    $permissionTree['Khác'] = [];
+                }
+                $permissionTree['Khác'][] = $permission;
+            }
+        }
+
+        return view('users.permissions', compact('users', 'roles', 'permissionTree'));
     }
 
     public function updatePermissions(Request $request)
